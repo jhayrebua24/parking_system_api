@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuids;
 
 class ParkingSlotTypes extends Model
 {
-    use HasFactory;
-    protected $fillables = ["type", "rate"];
+    use HasFactory, Uuids;
+    protected $fillable = ["type", "rate"];
 }

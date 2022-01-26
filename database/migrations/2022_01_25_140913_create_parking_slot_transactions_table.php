@@ -14,9 +14,9 @@ class CreateParkingSlotTransactionsTable extends Migration
     public function up()
     {
         Schema::create('parking_slot_transactions', function (Blueprint $table) {
-            $table->id();
-            $table->bigInteger("parking_slot_details_id")->unsigned();
-            $table->foreign("parking_slot_details_id","psd_id")->references("id")->on("parking_slot_details");
+            $table->uuid('id')->primary();
+            $table->uuid("parking_slot_detail_id");
+            $table->foreign("parking_slot_detail_id","psd_id")->references("id")->on("parking_slot_details");
             $table->string("plate_number",6);
             $table->datetime("datetime_in");
             $table->datetime("datetime_out")->nullable();

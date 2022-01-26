@@ -14,7 +14,7 @@ class CreateParkingSlotTypesTable extends Migration
     public function up()
     {
         Schema::create('parking_slot_types', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string("vehicle_size", 15);
             $table->float("rate");
             $table->timestamps();
