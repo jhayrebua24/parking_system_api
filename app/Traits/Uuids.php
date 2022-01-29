@@ -6,14 +6,14 @@ trait Uuids
    /**
      * Boot function from Laravel.
      */
-    protected static function boot()
+    protected static function bootUuids()
     {
-        parent::boot();
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = Str::uuid()->toString();
-            }
-        });
+        // parent::boot();
+        // static::creating(function ($model) {
+        //     if (empty($model->{$model->getKeyName()})) {
+        //         $model->{$model->getKeyName()} = Str::uuid()->toString();
+        //     }
+        // });
     }
    /**
      * Get the value indicating whether the IDs are incrementing.

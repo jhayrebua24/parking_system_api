@@ -14,10 +14,12 @@ class CreateParkingLotTilesTable extends Migration
     public function up()
     {
         Schema::create('parking_lot_tiles', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid("parking_lot_detail_id");
+            // $table->uuid('id')->primary();
+            $table->id();
+            $table->unsignedBigInteger("parking_lot_detail_id");
             $table->json("entrance_distance")->nullable();
             $table->boolean("is_obstacle")->default(0);
+            $table->boolean('can_be_entrance')->default(0);
             $table->boolean("is_open_space")->default(1);
             $table->boolean("is_parking_space")->default(0);
             $table->foreign("parking_lot_detail_id","pld_id")->references("id")->on("parking_lot_details");

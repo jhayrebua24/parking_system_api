@@ -14,7 +14,8 @@ class CreateParkingLotDetailsTable extends Migration
     public function up()
     {
         Schema::create('parking_lot_details', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            // $table->uuid('id')->primary();
+            $table->id();
             $table->string("name", 25);
             $table->integer('height');
             $table->integer('width');

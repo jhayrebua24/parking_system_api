@@ -4,23 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Uuids;
 
 class ParkingSlotDetail extends Model
 {
-    use HasFactory, Uuids;
-    protected $fillable = ["parking_lot_tiles_id", "parking_slot_types_id"];
+    use HasFactory;
+    protected $fillable = ["parking_lot_tile_id", "parking_slot_type_id"];
 
     public function tile(){
-        $this->belongsTo(ParkingLotTile::class);
+        return $this->belongsTo(ParkingLotTile::class);
     }
 
     public function type(){
-        $this->belongsTo(ParkingSlotType::class);
+        return $this->belongsTo(ParkingSlotType::class);
     }
 
     public function transactions(){
-        $this->hasMany(ParkingSlotTransaction::class);
+        return $this->hasMany(ParkingSlotTransaction::class);
     }
 
     public static function boot() {

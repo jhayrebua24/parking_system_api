@@ -4,25 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Uuids;
 
 class ParkingLotTile extends Model
 {
-    use HasFactory, Uuids;
+    use HasFactory;
     protected $guarded = ["id"];
 
     public function parking_details(){
-        $this->belongsTo(ParkingLotDetail::class);
+        return $this->belongsTo(ParkingLotDetail::class);
     }
 
     public function slot_details(){
-        $this->hasMany(ParkingSlotDetails::class);
+        return $this->hasOne(ParkingSlotDetail::class);
+    }
+
+    public function entrance_details(){
+        return $this->hasOne(ParkingLotEntrance::class);
+    }
+
+    public function entrance_distance(){
+        return $this->hasMany(ParkingSlotDistance::class);
     }
 
     public static function boot() {
         parent::boot();
         static::deleting(function($tile) { // before delete() method call this
              $tile->slot_details()->delete();
+             $tile->entrance_distance()->delete();
+             $tile->entrance_details()->delete();
              // do the rest of the cleanup...
         });
     }

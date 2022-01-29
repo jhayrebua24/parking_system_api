@@ -20,5 +20,6 @@ Route::prefix('v1')->group(function() {
         Route::get('/',[ParkingLotDetailsController::class, "index"]);
         Route::post('/',[ParkingLotDetailsController::class, "store"]);
         Route::delete('/{id}',[ParkingLotDetailsController::class, "delete"]);
+        Route::get('/{id}',[ParkingLotDetailsController::class, "show"]);
     });
 });
