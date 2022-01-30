@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\api\ParkingLotDetailsController;
+use App\Http\Controllers\api\ParkingLotTileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +22,8 @@ Route::prefix('v1')->group(function() {
         Route::post('/',[ParkingLotDetailsController::class, "store"]);
         Route::delete('/{id}',[ParkingLotDetailsController::class, "delete"]);
         Route::get('/{id}',[ParkingLotDetailsController::class, "show"]);
+
+        Route::post('/{id}/obstacle',[ParkingLotTileController::class, "addObstacle"]);
+        Route::post('/{id}/entrance',[ParkingLotTileController::class, "addEntrance"]);
     });
 });

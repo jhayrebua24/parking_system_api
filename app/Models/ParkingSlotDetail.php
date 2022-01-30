@@ -14,8 +14,8 @@ class ParkingSlotDetail extends Model
         return $this->belongsTo(ParkingLotTile::class);
     }
 
-    public function type(){
-        return $this->belongsTo(ParkingSlotType::class);
+    public function slot_type(){
+        return $this->belongsTo(ParkingSlotType::class, 'parking_slot_type_id');
     }
 
     public function transactions(){

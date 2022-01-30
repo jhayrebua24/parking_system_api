@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ParkingSlotType extends Model
 {
     use HasFactory;
-    protected $fillable = ["type", "rate"];
+    protected $fillable = ["vehicle_size", "rate"];
+
+    public function slot_details() {
+        return $this->hasMany(ParkingSlotDetail::class, 'parking_slot_type_id');
+    }
 }

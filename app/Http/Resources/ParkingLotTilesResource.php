@@ -18,14 +18,18 @@ class ParkingLotTilesResource extends JsonResource
         $slot = $this->slot_details;
 
         if($slot){
+
             $slot_details = [
-                'type' => $slot->type,
-                'transaction' => $slot->transaction
+                'size' => $slot->slot_type->vehicle_size,
+                'rate' => $slot->slot_type->rate,
+                'is_occupied' => $slot->is_occupied,
+                'transactions' => $slot->transaction
             ];
         }
 
         return [
-            'entrance_distance' => $this->entrance_distance,
+            'id' => $this->id,
+            // 'entrance_distance' => $this->entrance_distance,
             'is_obstacle' => $this->is_obstacle,
             'is_open_space' => $this->is_open_space,
             'is_parking_space' => $this->is_parking_space,
