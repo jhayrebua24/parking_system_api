@@ -13,4 +13,8 @@ class ParkingSlotDistance extends Model
     public function tile(){
         return $this->belongsTo(ParkingLotTile::class);
     }
+
+    public function entrance(){
+        return $this->belongsTo(ParkingLotEntrance::class);
+    }
 }

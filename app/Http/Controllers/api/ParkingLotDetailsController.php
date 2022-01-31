@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ParkingLotDetail;
 use App\Models\ParkingLotTile;
+use App\Models\ParkingSlotType;
 use App\Http\Resources\ParkingLotDetailsResource;
+use App\Http\Resources\ParkingSlotTypeResource;
 use App\Http\Resources\ParkingLotTilesResource;
 use App\Http\Requests\ParkingLotDetailsRequests;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -62,5 +64,10 @@ class ParkingLotDetailsController extends Controller
         } catch(ModelNotFoundException $ex) {
             abort(404, "Parking lot not found");
         }
+    }
+
+    public function parkingSlotType()
+    {
+        return ParkingSlotTypeResource::collection(ParkingSlotType::all());
     }
 }

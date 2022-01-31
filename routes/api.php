@@ -23,7 +23,12 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}',[ParkingLotDetailsController::class, "delete"]);
         Route::get('/{id}',[ParkingLotDetailsController::class, "show"]);
 
+        
+
         Route::post('/{id}/obstacle',[ParkingLotTileController::class, "addObstacle"]);
         Route::post('/{id}/entrance',[ParkingLotTileController::class, "addEntrance"]);
+
+        //
+        Route::get('/utils/slot-type',[ParkingLotDetailsController::class, "parkingSlotType"]);
     });
 });

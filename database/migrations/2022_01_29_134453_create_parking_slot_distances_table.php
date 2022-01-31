@@ -15,9 +15,11 @@ class CreateParkingSlotDistancesTable extends Migration
     {
         Schema::create('parking_slot_distances', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("parking_lot_tile_id");
+            $table->unsignedBigInteger("parking_slot_detail_id");
+            $table->unsignedBigInteger("parking_lot_entrance_id");
             $table->integer('distance')->default(0);
-            $table->foreign("parking_lot_tile_id","psd_plt_id")->references("id")->on("parking_lot_tiles");
+            $table->foreign("parking_slot_detail_id","psd_psd_id")->references("id")->on("parking_slot_details");
+            $table->foreign("parking_lot_entrance_id","psd_ple_id")->references("id")->on("parking_lot_entrances");
             $table->timestamps();
         });
     }
