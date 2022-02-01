@@ -11,7 +11,7 @@ class ParkingSlotDistance extends Model
     protected $guarded = ["id"];
 
     public function tile(){
-        return $this->belongsTo(ParkingLotTile::class);
+        return $this->belongsTo(ParkingLotTile::class, 'parking_slot_detail_id');
     }
 
     public function entrance(){

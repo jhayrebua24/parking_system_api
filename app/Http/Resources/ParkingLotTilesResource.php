@@ -18,7 +18,6 @@ class ParkingLotTilesResource extends JsonResource
         $slot = $this->slot_details;
 
         if($slot){
-
             $slot_details = [
                 'size' => $slot->slot_type->vehicle_size,
                 'rate' => $slot->slot_type->rate,

@@ -56,7 +56,7 @@ class ParkingLotDetailsController extends Controller
     {
         try {
             $parking_lot = ParkingLotDetail::findOrFail($id);
-            $parking_lot->tiles()->delete();
+            // $parking_lot->tiles()->delete();
             $parking_lot->delete();
             return response()->json([
                 'message' => 'Parking lot has been deleted',

@@ -23,15 +23,6 @@ class ParkingSlotDetail extends Model
     }
 
     public function entrance_distance(){
-        return $this->hasMany(ParkingSlotDistance::class);
-    }
-
-    public static function boot() {
-        parent::boot();
-        static::deleting(function($detail) { // before delete() method call this
-             $detail->transactions()->delete();
-             $detail->entrance_distance()->delete();
-             // do the rest of the cleanup...
-        });
+        return $this->hasMany(ParkingSlotDistance::class, 'parking_slot_detail_id');
     }
 }

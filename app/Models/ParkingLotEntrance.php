@@ -14,4 +14,8 @@ class ParkingLotEntrance extends Model
     public function tile() {
         return $this->belongsTo(ParkingLotTile::class);
     }
+
+    public function distance() {
+        return $this->hasMany(ParkingSlotDistance::class);
+    }
 }

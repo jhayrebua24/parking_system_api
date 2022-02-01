@@ -21,13 +21,4 @@ class ParkingLotTile extends Model
     public function entrance_details(){
         return $this->hasOne(ParkingLotEntrance::class);
     }
-
-    public static function boot() {
-        parent::boot();
-        static::deleting(function($tile) { // before delete() method call this
-             $tile->slot_details()->delete();
-             $tile->entrance_details()->delete();
-             // do the rest of the cleanup...
-        });
-    }
 }
