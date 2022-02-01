@@ -16,6 +16,6 @@ class ParkingLotEntrance extends Model
     }
 
     public function distance() {
-        return $this->hasMany(ParkingSlotDistance::class);
+        return $this->hasMany(ParkingSlotDistance::class,'parking_lot_entrance_id');
     }
 }

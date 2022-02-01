@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ParkingLotTile;
+use App\Models\ParkingSlotDistance;
 use App\Http\Requests\AddObstacleRequest;
 use App\Http\Requests\AddEntranceRequest;
 use App\Http\Requests\AddParkingSlotRequest;
@@ -72,21 +73,24 @@ class ParkingLotTileController extends Controller
                  return $item['id'];
              }))
              ->where('is_obstacle', 0)
-             ->where('is_open_space', 1)
-             ->where('is_parking_space', 0)
              ->get();
          // add to entrance details
          foreach($tiles as $tile) {
-            $slot_details = $tile->slot_details()->create(
-                [
-                    'parking_slot_type_id' => $request->parking_slot_type,
-                ]
-            );
+             if(!$tile->slot_details){
+                $tile->slot_details()->create(
+                    [
+                        'parking_slot_type_id' => $request->parking_slot_type,
+                    ]
+                );
+             } 
+             $tile->refresh();
+             $slot_details = $tile->slot_details;
             //get distance details from current tile iteration
             $distance_details = $distance->first(function ($item) use ($tile) {
                 return $item['id'] === $tile->id;
             });
             $entrance_distances = collect($distance_details['entrance_distances']); // convert to collection
+            $slot_details->entrance_distance()->delete();
             foreach($entrance_distances as $dst) {
                 $slot_details->entrance_distance()->create([
                     'parking_lot_entrance_id' => $dst['id'],

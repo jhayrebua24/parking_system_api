@@ -18,11 +18,29 @@ class ParkingLotTilesResource extends JsonResource
         $slot = $this->slot_details;
 
         if($slot){
+            $distances = [];
+            foreach($slot->entrance_distance as $ed){
+                array_push($distances, [
+                    'id' => $ed->id,
+                    'distance' => $ed->distance,
+                    'entry' => $ed->entrance->name ?? ""
+                ]);
+            }
+
+
             $slot_details = [
                 'size' => $slot->slot_type->vehicle_size,
                 'rate' => $slot->slot_type->rate,
                 'is_occupied' => $slot->is_occupied,
-                'transactions' => $slot->transaction
+                'transactions' => $slot->transaction,
+                'distances' =>  $distances,
+                // ->map(function ($item) {
+                //     return [
+                        // 'id' => $item['id'],
+                        // 'distance' => $item['distance'],
+                        // 'entry' => $item['entrance'],
+                //     ];
+                // }),
             ];
         }
 
