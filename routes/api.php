@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\api\ParkingLotDetailsController;
 use App\Http\Controllers\api\ParkingLotTileController;
+use App\Http\Controllers\api\ParkingSlotTransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,13 @@ Route::prefix('v1')->group(function() {
         Route::delete('/{id}',[ParkingLotDetailsController::class, "delete"]);
         Route::get('/{id}',[ParkingLotDetailsController::class, "show"]);
 
+        Route::get('/{id}/parking-slot/{entryId}/nearest-available-slot/{vehicleTypeId}',[ParkingSlotTransactionController::class, "getNearestParkingSlot"]);
         
 
         Route::post('/{id}/obstacle',[ParkingLotTileController::class, "addObstacle"]);
         Route::post('/{id}/entrance',[ParkingLotTileController::class, "addEntrance"]);
         Route::post('/{id}/parking-slot',[ParkingLotTileController::class, "addParkingSlot"]);
+        Route::post('/{id}/park-car',[ParkingSlotTransactionController::class, "parkCar"]);
         
         //
         Route::get('/utils/slot-type',[ParkingLotDetailsController::class, "parkingSlotType"]);

@@ -26,7 +26,7 @@ class AddEntranceRequest extends FormRequest
         $id = $this->route('id');
         return [
             'tile_ids' => 'array|min:1|required',
-            'tile_ids.*.name' => 'string|required|max:25|min:1|unique:parking_lot_entrances,name,'.$id.',parking_lot_tile_id',
+            'tile_ids.*.name' => 'string|required|max:25|min:1',
             'tile_ids.*.id' => 'integer|required',
         ];
     }

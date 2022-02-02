@@ -10,8 +10,8 @@ class ParkingSlotDistance extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function tile(){
-        return $this->belongsTo(ParkingLotTile::class, 'parking_slot_detail_id');
+    public function slot_detail(){
+        return $this->belongsTo(ParkingSlotDetail::class, 'parking_slot_detail_id');
     }
 
     public function entrance(){

@@ -19,6 +19,6 @@ class ParkingLotTile extends Model
     }
 
     public function entrance_details(){
-        return $this->hasOne(ParkingLotEntrance::class);
+        return $this->hasOne(ParkingLotEntrance::class, 'parking_lot_tile_id');
     }
 }

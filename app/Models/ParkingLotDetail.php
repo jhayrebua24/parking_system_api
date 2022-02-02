@@ -17,7 +17,8 @@ class ParkingLotDetail extends Model
     public static function boot() {
         parent::boot();
         static::deleting(function($tile) { // before delete() method call this
-            $tile->tiles->each(function ($tile) {
+            $delete_tile = false;
+            $tile->tiles->each(function ($tile, $key) {
                 $slot_details = $tile->slot_details;
                 if($slot_details) {
                     $slot_details->transactions()->delete();

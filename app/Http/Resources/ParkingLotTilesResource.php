@@ -27,20 +27,14 @@ class ParkingLotTilesResource extends JsonResource
                 ]);
             }
 
-
             $slot_details = [
                 'size' => $slot->slot_type->vehicle_size,
                 'rate' => $slot->slot_type->rate,
                 'is_occupied' => $slot->is_occupied,
-                'transactions' => $slot->transaction,
+                'transactions' => $slot->transactions()
+                    ->select('plate_number','datetime_in', 'id')
+                    ->where('datetime_out', null)->latest()->first(),
                 'distances' =>  $distances,
-                // ->map(function ($item) {
-                //     return [
-                        // 'id' => $item['id'],
-                        // 'distance' => $item['distance'],
-                        // 'entry' => $item['entrance'],
-                //     ];
-                // }),
             ];
         }
 

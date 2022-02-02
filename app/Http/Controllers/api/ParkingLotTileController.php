@@ -76,15 +76,15 @@ class ParkingLotTileController extends Controller
              ->get();
          // add to entrance details
          foreach($tiles as $tile) {
-             if(!$tile->slot_details){
+             if(!$tile->slot_details && $request->parking_slot_type){
                 $tile->slot_details()->create(
                     [
                         'parking_slot_type_id' => $request->parking_slot_type,
                     ]
                 );
              } 
-             $tile->refresh();
-             $slot_details = $tile->slot_details;
+            $tile->refresh();
+            $slot_details = $tile->slot_details;
             //get distance details from current tile iteration
             $distance_details = $distance->first(function ($item) use ($tile) {
                 return $item['id'] === $tile->id;
