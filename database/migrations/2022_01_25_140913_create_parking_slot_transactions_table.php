@@ -23,8 +23,7 @@ class CreateParkingSlotTransactionsTable extends Migration
             $table->datetime("datetime_out")->nullable();
             $table->integer("total_hrs")->nullable();
             $table->float("total_amount")->nullable();
-            $table->boolean("is_continuous")->default(0);
-            $table->integer("continuous_trans_id")->nullable();
+            $table->integer("offset_minutes")->default(0);
             $table->timestamps();
         });
     }

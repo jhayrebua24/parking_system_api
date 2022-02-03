@@ -11,6 +11,6 @@ class ParkingSlotTransaction extends Model
     protected $guarded = ["id"];
 
     public function slot_details(){
-        return $this->belongsTo(ParkingSlotDetail::class);
+        return $this->belongsTo(ParkingSlotDetail::class, 'parking_slot_detail_id');
     }
 }

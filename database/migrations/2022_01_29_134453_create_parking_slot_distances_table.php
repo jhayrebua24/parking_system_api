@@ -18,8 +18,8 @@ class CreateParkingSlotDistancesTable extends Migration
             $table->unsignedBigInteger("parking_slot_detail_id");
             $table->unsignedBigInteger("parking_lot_entrance_id");
             $table->integer('distance')->default(0);
-            $table->foreign("parking_slot_detail_id","psd_psd_id")->references("id")->on("parking_slot_details");
-            $table->foreign("parking_lot_entrance_id","psd_ple_id")->references("id")->on("parking_lot_entrances");
+            // $table->foreign("parking_slot_detail_id","psd_psd_id")->references("id")->on("parking_slot_details");
+            // $table->foreign("parking_lot_entrance_id","psd_ple_id")->references("id")->on("parking_lot_entrances");
             $table->timestamps();
         });
     }

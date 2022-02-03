@@ -18,7 +18,7 @@ class CreateParkingLotEntrancesTable extends Migration
             $table->id();
             $table->unsignedBigInteger("parking_lot_tile_id");
             $table->string('name', 10);
-            $table->foreign("parking_lot_tile_id","ple_plt_id")->references("id")->on("parking_lot_tiles");
+            // $table->foreign("parking_lot_tile_id","ple_plt_id")->references("id")->on("parking_lot_tiles");
             $table->timestamps();
         });
     }

@@ -8,9 +8,11 @@ use App\Models\ParkingLotTile;
 use App\Models\ParkingLotEntrance;
 use App\Models\ParkingSlotTransaction;
 use App\Http\Requests\ParkCarRequest;
+use App\Http\Requests\UnparkCarRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Carbon\Carbon;
 
 class ParkingSlotTransactionController extends Controller
 {
@@ -96,6 +98,81 @@ class ParkingSlotTransactionController extends Controller
            
         } catch(ModelNotFoundException $e){
             abort(404, "Unable to park car!");
+        }
+    }
+
+    public function unparkCar(UnparkCarRequest $request, $pli, $txn_id) {
+        try {
+            $txn = ParkingSlotTransaction::where('id',$txn_id)
+                ->whereHas('slot_details.tile', function ($q) use ($pli) {
+                    return $q->where('parking_lot_detail_id', $pli);
+                })
+                ->where('datetime_out', null)
+                ->firstOrFail();
+            $slot_details = $txn->slot_details;
+            $rate = $slot_details->slot_type->rate;
+            $entry = Carbon::parse($txn->datetime_in);
+            $out = Carbon::parse($request->datetime_out);
+
+            if($entry->gt($out))
+                abort(404, "Invalid date");
+
+            $overnight = 0;
+            $total_rate = 40;
+            $totalHrs = ceil(floatval($entry->diffInMinutes($out) / 60)) - 1;
+            if($totalHrs > 3 && $totalHrs < 24){
+                $total_rate = $total_rate + floatval(($totalHrs - 3) * $rate);
+            }
+
+            if($totalHrs >= 24) {
+                $overnight = floor($totalHrs / 24);
+                $total_rate = floatval($overnight * 5000);
+                $remaining_hours = $totalHrs - ($overnight * 24);
+
+                $total_rate = $total_rate + floatval($remaining_hours * $rate);
+            }
+
+            $txn->update([
+                'datetime_out' => $request->datetime_out,
+                'total_hrs' => $totalHrs,
+                'total_amount' => $total_rate
+            ]);
+
+            $txn->slot_details()->update([
+                'is_occupied' => 0
+            ]);
+
+            return response()->json([
+                'message' => 'Thank you for parking with us!',
+                'data' => [
+                    'overnight_park' => $overnight,
+                    'total_rate' => $total_rate,
+                    'total_hrs' => $totalHrs,
+                ]
+            ]);
+            // $tile = ParkingLotTile::where('parking_lot_detail_id', $pli)
+            //     ->whereHas('slot_details', function ($q) {
+            //             $q->where('is_occupied', 0);
+            //     })
+            //     ->where('is_parking_space', 1)
+            //     ->where('id', $request->tile_id)
+            //     ->firstOrFail();
+
+            // $tile->slot_details()->update([
+            //     'is_occupied' => 1,
+            // ]);
+
+            // $newTransaction = $tile->slot_details
+            //     ->transactions()
+            //     ->create($request->only('datetime_in', 'plate_number'));
+
+            // return response()->json([
+            //     'data' => $newTransaction,
+            //     'message' => "Car successfully parked!"
+            // ]);
+           
+        } catch(ModelNotFoundException $e){
+            abort(404, "Unable to find parking record!");
         }
     }
 }

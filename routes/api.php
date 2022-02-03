@@ -31,6 +31,7 @@ Route::prefix('v1')->group(function() {
         Route::post('/{id}/entrance',[ParkingLotTileController::class, "addEntrance"]);
         Route::post('/{id}/parking-slot',[ParkingLotTileController::class, "addParkingSlot"]);
         Route::post('/{id}/park-car',[ParkingSlotTransactionController::class, "parkCar"]);
+        Route::put('/{id}/unpark-car/{txn_id}',[ParkingSlotTransactionController::class, "unparkCar"]);
         
         //
         Route::get('/utils/slot-type',[ParkingLotDetailsController::class, "parkingSlotType"]);

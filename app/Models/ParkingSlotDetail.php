@@ -11,7 +11,7 @@ class ParkingSlotDetail extends Model
     protected $fillable = ["parking_lot_tile_id", "parking_slot_type_id"];
 
     public function tile(){
-        return $this->belongsTo(ParkingLotTile::class);
+        return $this->belongsTo(ParkingLotTile::class, 'parking_lot_tile_id');
     }
 
     public function slot_type(){
@@ -19,7 +19,7 @@ class ParkingSlotDetail extends Model
     }
 
     public function transactions(){
-        return $this->hasMany(ParkingSlotTransaction::class);
+        return $this->hasMany(ParkingSlotTransaction::class, 'parking_slot_detail_id');
     }
 
     public function entrance_distance(){
