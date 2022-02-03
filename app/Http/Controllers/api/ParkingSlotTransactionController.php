@@ -74,6 +74,19 @@ class ParkingSlotTransactionController extends Controller
                 ->first();
             if($checkIfCarIsParked)
                 abort(400, 'Car is still parked!');
+            $datein = Carbon::parse($request->datetime_in);
+            $previousRecordWithinHour = ParkingSlotTransaction::whereDate('datetime_in','=', $datein)
+                ->whereTime('datetime_in', '>', $datein->subHours(1))
+                ->where('plate_number','=', $request->plate_number)
+                ->where('datetime_out','!=', null)
+                ->first();
+
+            $offset_minutes = 0;
+            if($previousRecordWithinHour){
+                $in = Carbon::parse($previousRecordWithinHour->datetime_in);
+                $new_in = Carbon::parse($request->datetime_in);
+                $offset_minutes = $in->diffInMinutes($new_in);
+            }
 
             $tile = ParkingLotTile::where('parking_lot_detail_id', $pli)
                 ->whereHas('slot_details', function ($q) {
@@ -86,11 +99,14 @@ class ParkingSlotTransactionController extends Controller
             $tile->slot_details()->update([
                 'is_occupied' => 1,
             ]);
-
+        
             $newTransaction = $tile->slot_details
                 ->transactions()
-                ->create($request->only('datetime_in', 'plate_number'));
-
+                ->create([
+                    'datetime_in' => $request->datetime_in,
+                    'plate_number' => $request->plate_number,
+                    'offset_minutes' => $offset_minutes,
+                ]);
             return response()->json([
                 'data' => $newTransaction,
                 'message' => "Car successfully parked!"
@@ -110,6 +126,7 @@ class ParkingSlotTransactionController extends Controller
                 ->where('datetime_out', null)
                 ->firstOrFail();
             $slot_details = $txn->slot_details;
+            $offset = $txn->offset_minutes;
             $rate = $slot_details->slot_type->rate;
             $entry = Carbon::parse($txn->datetime_in);
             $out = Carbon::parse($request->datetime_out);
@@ -118,8 +135,9 @@ class ParkingSlotTransactionController extends Controller
                 abort(404, "Invalid date");
 
             $overnight = 0;
-            $total_rate = 40;
-            $totalHrs = ceil(floatval($entry->diffInMinutes($out) / 60)) - 1;
+            $total_rate = $offset > 0 ? 0 : 40;
+            $diff = $entry->diffInMinutes($out) + $offset;
+            $totalHrs = ceil(floatval($diff / 60));
             if($totalHrs > 3 && $totalHrs < 24){
                 $total_rate = $total_rate + floatval(($totalHrs - 3) * $rate);
             }
@@ -148,6 +166,7 @@ class ParkingSlotTransactionController extends Controller
                     'overnight_park' => $overnight,
                     'total_rate' => $total_rate,
                     'total_hrs' => $totalHrs,
+                    'total_minutes' => $diff,
                 ]
             ]);
             // $tile = ParkingLotTile::where('parking_lot_detail_id', $pli)
